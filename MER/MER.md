@@ -74,8 +74,9 @@ O modelo também inclui **entidades fracas**, que são representadas por linhas 
 3. **Carrinho de Compra**
 4. **Lista de Desejos**
 5. **Avaliação**
+6. **Carteira**
 
-Essas entidades são fracas em relação ao **Usuário**, pois sua identificação depende da existência de um Usuário. Ou seja, o **Inventário**, **Carrinho de Compra**, **Avaliação** e **Lista de Desejos** não teriam sentido sem o **Usuário** que as define. Da mesma forma, o **Pagamento** é gerado por um **Carrinho de Compra**, que o define.
+Essas entidades são fracas em relação ao **Usuário**, pois sua identificação depende da existência de um Usuário. Ou seja, o **Inventário**, **Carrinho de Compra**, **Avaliação**, **Carteira** e **Lista de Desejos** não teriam sentido sem o **Usuário** que as define. Da mesma forma, o **Pagamento** é gerado por um **Carrinho de Compra**, que o define.
 
 ---
 
