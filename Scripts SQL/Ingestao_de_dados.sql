@@ -47,12 +47,6 @@ INSERT INTO Wishlist (Id, id_usuario) VALUES
 (5, '56789012345');
 
 -- Insert into Inventario (Owned Games)
-INSERT INTO Inventario (Id_inventario, id_usuario, id_item) VALUES
-(1, '12345678901', 1),
-(2, '23456789012', 3),
-(3, '34567890123', 5),
-(4, '45678901234', 2),
-(5, '56789012345', 4);
 
 -- Zelda: Breath of the Wild 2 (Most Sold)
 INSERT INTO Inventario (Id_inventario, id_usuario, id_item) VALUES
@@ -90,6 +84,13 @@ INSERT INTO Inventario (Id_inventario, id_usuario, id_item) VALUES
 (23, '12345678901', 1),
 (24, '23456789012', 1),
 (25, '34567890123', 1);
+
+-- FIFA 25 (4 Purchases)
+INSERT INTO Inventario (Id_inventario, id_usuario, id_item) VALUES
+(26, '12345678901', 2),
+(27, '23456789012', 2),
+(28, '34567890123', 2),
+(29, '45678901234', 2);
 
 -- Insert into Carteira (Wallets)
 INSERT INTO Carteira (id_usuario, saldo) VALUES
