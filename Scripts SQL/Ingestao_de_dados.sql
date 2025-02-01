@@ -54,6 +54,43 @@ INSERT INTO Inventario (Id_inventario, id_usuario, id_item) VALUES
 (4, '45678901234', 2),
 (5, '56789012345', 4);
 
+-- Zelda: Breath of the Wild 2 (Most Sold)
+INSERT INTO Inventario (Id_inventario, id_usuario, id_item) VALUES
+(1, '12345678901', 4),
+(2, '23456789012', 4),
+(3, '34567890123', 4),
+(4, '45678901234', 4),
+(5, '56789012345', 4),
+(6, '12345678901', 4),
+(7, '23456789012', 4),
+(8, '34567890123', 4),
+(9, '45678901234', 4),
+(10, '56789012345', 4);
+
+-- GTA VI (Second Most Sold)
+INSERT INTO Inventario (Id_inventario, id_usuario, id_item) VALUES
+(11, '12345678901', 3),
+(12, '23456789012', 3),
+(13, '34567890123', 3),
+(14, '45678901234', 3),
+(15, '56789012345', 3),
+(16, '12345678901', 3),
+(17, '23456789012', 3);
+
+-- Counter-Strike 2 (Third Most Sold)
+INSERT INTO Inventario (Id_inventario, id_usuario, id_item) VALUES
+(18, '12345678901', 5),
+(19, '23456789012', 5),
+(20, '34567890123', 5),
+(21, '45678901234', 5),
+(22, '56789012345', 5);
+
+-- Assassin's Creed (Fourth Most Sold)
+INSERT INTO Inventario (Id_inventario, id_usuario, id_item) VALUES
+(23, '12345678901', 1),
+(24, '23456789012', 1),
+(25, '34567890123', 1);
+
 -- Insert into Carteira (Wallets)
 INSERT INTO Carteira (id_usuario, saldo) VALUES
 ('12345678901', 500),
