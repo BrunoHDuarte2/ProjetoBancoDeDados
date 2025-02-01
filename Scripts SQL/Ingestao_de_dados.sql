@@ -23,12 +23,49 @@ INSERT INTO Produtora (Id_produtora, Nome) VALUES
 ('55555555555555', 'Valve');
 
 -- Insert into Avaliacao
+-- Reviews for Zelda: Breath of the Wild 2 (10 reviews, high ratings)
 INSERT INTO Avaliacao (id_avaliacao, Nota, Comentario) VALUES
-(1, 5, 'Amazing gameplay and story.'),
-(2, 4, 'Great graphics but short campaign.'),
-(3, 3, 'Good mechanics but needs improvement.'),
-(4, 2, 'Boring storyline, not recommended.'),
-(5, 5, 'One of the best games ever!');
+(1, 5, 'Jogo incrível, melhor da franquia!'),
+(2, 5, 'Gráficos espetaculares, jogabilidade perfeita.'),
+(3, 4, 'Ótimo jogo, mas a história poderia ser melhor.'),
+(4, 5, 'Exploração fantástica, vale cada centavo.'),
+(5, 5, 'A trilha sonora é incrível.'),
+(6, 4, 'Muito bom, mas esperava mais inovações.'),
+(7, 5, 'Definitivamente um dos melhores jogos já feitos.'),
+(8, 5, 'O mundo aberto é simplesmente maravilhoso.'),
+(9, 5, 'A física do jogo é impressionante.'),
+(10, 4, 'Bom jogo, mas tem alguns bugs.');
+
+-- Reviews for GTA VI (7 reviews, slightly lower ratings)
+INSERT INTO Avaliacao (id_avaliacao, Nota, Comentario) VALUES
+(11, 5, 'O melhor GTA já feito!'),
+(12, 4, 'Gráficos incríveis, mas a IA dos NPCs poderia ser melhor.'),
+(13, 5, 'O mapa é gigantesco e muito detalhado.'),
+(14, 4, 'Ótimo jogo, mas tem microtransações.'),
+(15, 5, 'O realismo do jogo é impressionante.'),
+(16, 4, 'Ótimo jogo, mas prefiro GTA V.'),
+(17, 5, 'Modo história muito bem feito!');
+
+-- Reviews for Counter-Strike 2 (5 reviews)
+INSERT INTO Avaliacao (id_avaliacao, Nota, Comentario) VALUES
+(18, 4, 'Melhorado em relação ao CS:GO.'),
+(19, 5, 'Os gráficos e a movimentação estão bem melhores.'),
+(20, 3, 'Ainda tem muitos hackers no jogo.'),
+(21, 4, 'Ótima jogabilidade, mas falta mais conteúdo.'),
+(22, 5, 'Ótimo para quem gosta de jogos competitivos.');
+
+-- Reviews for Assassin’s Creed (3 reviews)
+INSERT INTO Avaliacao (id_avaliacao, Nota, Comentario) VALUES
+(23, 4, 'História muito envolvente.'),
+(24, 4, 'Bons gráficos, mas tem bugs.'),
+(25, 5, 'O combate e a exploração são muito divertidos.');
+
+-- Reviews for FIFA 25 (4 reviews, lowest average)
+INSERT INTO Avaliacao (id_avaliacao, Nota, Comentario) VALUES
+(26, 3, 'Mesmo jogo de sempre, poucas novidades.'),
+(27, 4, 'Boa jogabilidade, mas os servidores são ruins.'),
+(28, 3, 'Muitos bugs no modo carreira.'),
+(29, 4, 'Ótimo para jogar com amigos.');
 
 -- Insert into Item (Games)
 INSERT INTO Item (id_item, Nome, Descrição, Preco, Data_lancamento, id_produtora) VALUES
@@ -47,7 +84,6 @@ INSERT INTO Wishlist (Id, id_usuario) VALUES
 (5, '56789012345');
 
 -- Insert into Inventario (Owned Games)
-
 -- Zelda: Breath of the Wild 2 (Most Sold)
 INSERT INTO Inventario (Id_inventario, id_usuario, id_item) VALUES
 (1, '12345678901', 4),
