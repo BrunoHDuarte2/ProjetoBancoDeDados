@@ -1,45 +1,39 @@
 import Image from "next/image";
+import Header from "../components/header";
+import Link from 'next/link';
 
-export default function Home() {
+export default function Store() {
+  const games = ["Super Mario Odyssey", "The Legend of Zelda: Breath of the Wild", "Mario Kart 8", "Mario Kart 9","Pokémon: Legends Z-A", "GTA V", "GTA VI"];
+
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/steam_icon.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        
-        <p className="text-4xl">Homepag  ©    e</p>
+        <Header bgColor="black"/>
+      <main className="flex flex-col gap-12 row-start-2 items-center sm:items-start">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+        {games.map((game) => (
+          <div key={game} className="bg-white rounded-lg shadow-md overflow-hidden relative">
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+            <img src="mario.avif"
+            alt={game} className="w-full h-64 object-cover" /> :
+            <div className="w-full h-30 object-cover"></div>
+
+            <div className="p-4">
+              <div className="flex justify-between items-center mb-2">
+
+                <h2 className="text-black text-xl font-bold text-left">{game}</h2>
+  
+              </div>
+              <div className="mt-4 flex justify-between items-center">
+                <Link href={`/game/${games.findIndex((g) => g === game)}`} legacyBehavior>
+                  <a className="text-black font-semibold">
+                    Ver mais
+                  </a> 
+                </Link>
+              </div>
+            </div>
+          </div>
+         ))}
+      </div>
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
         <a

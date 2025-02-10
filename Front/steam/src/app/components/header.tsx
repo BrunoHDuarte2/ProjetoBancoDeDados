@@ -6,6 +6,7 @@ import { Link as RLink } from 'react-scroll';
 import { IoIosArrowDown } from "react-icons/io";
 import Link from 'next/link';
 import Image from "next/image";
+import { FaShoppingCart } from "react-icons/fa";
 
 interface HeaderProps {
   bgColor?: string; 
@@ -14,31 +15,28 @@ interface HeaderProps {
 function Links() {
   return (
     <>
-      <RLink
-        to="Cardx3"
-        smooth={true}
-        duration={500}
-        spy={true}
-        activeClass="font-semibold"
+      <Link
+        href={'/cart'}
+      >
+        <FaShoppingCart className="text-2xl hover:text-3xl"/>
+      </Link>
+      <Link
+        href={`/user/0`}
         className="text-white transition-transform transform hover:font-semibold hover:underline hover:underline-offset-4 text-2xl"
       >
         Perfil
-      </RLink>
+      </Link>
 
-      <RLink
-        to="NossoTime"
-        smooth={true}
-        duration={500}
-        spy={true}
-        activeClass="font-semibold"
+      <Link
+        href="/library"
         className="text-white transition-transform transform hover:font-semibold hover:underline hover:underline-offset-4 text-2xl"
       >
-        Inventário
-      </RLink>
+        Biblioteca
+      </Link>
 
       <span className="hidden md:flex text-white text-6xl font-thin">|</span>
 
-      <Link href='/homeblog' legacyBehavior>
+      <Link href='/store' legacyBehavior>
         <a className="text-white transition-transform transform font-semibold hover:underline hover:underline-offset-4 text-4xl">
           Loja
         </a>
