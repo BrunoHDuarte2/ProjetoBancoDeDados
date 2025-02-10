@@ -1,4 +1,4 @@
-# Álgebra relacional da view jogos_mais_vendidos:
+## Álgebra relacional - view *jogos_mais_vendidos*:
 
 π_nome(jogo), π_nome(produtora), π_descricao, π_data_lancamento, <br/>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   count(π_id_item(inventario)), <br/>
