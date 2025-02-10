@@ -2,11 +2,9 @@
 
 import { GiTurtle } from "react-icons/gi";
 import { useState, useEffect } from "react";
-import { Link as RLink } from 'react-scroll';
 import { IoIosArrowDown } from "react-icons/io";
 import Link from 'next/link';
 import Image from "next/image";
-import { FaShoppingCart } from "react-icons/fa";
 
 interface HeaderProps {
   bgColor?: string; 
@@ -17,14 +15,15 @@ function Links() {
     <>
       <Link
         href={'/cart'}
-      >
-        <FaShoppingCart className="text-2xl hover:text-3xl"/>
-      </Link>
-      <Link
-        href={`/user/0`}
         className="text-white transition-transform transform hover:font-semibold hover:underline hover:underline-offset-4 text-2xl"
       >
-        Perfil
+        Carrinho
+      </Link>
+      <Link
+        href={`/store`}
+        className="text-white transition-transform transform hover:font-semibold hover:underline hover:underline-offset-4 text-2xl"
+      >
+        Loja
       </Link>
 
       <Link
@@ -36,16 +35,19 @@ function Links() {
 
       <span className="hidden md:flex text-white text-6xl font-thin">|</span>
 
-      <Link href='/store' legacyBehavior>
-        <a className="text-white transition-transform transform font-semibold hover:underline hover:underline-offset-4 text-4xl">
-          Loja
-        </a>
-      </Link>
+      <Image
+        src="/profile.jpeg"
+        alt="Foto de Perfil"
+        width={60}
+        height={60}
+        priority
+        className="rounded-full w-14 h-14 mx-auto"
+      />
     </>
   );
 }
 
-const Header: React.FC<HeaderProps> = ({ bgColor = "bg-gray-700" }) => {
+const Header: React.FC<HeaderProps> = ({ }) => {
   const [estaAberto, setEstaAberto] = useState(false);
 
   const alternarNavbar = () => {
