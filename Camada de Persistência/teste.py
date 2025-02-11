@@ -1,17 +1,24 @@
 import requests
+import base64
 
 # URL da API
-url = "http://localhost:5000/itemSearch/33"  # Ajuste a URL conforme necessário
+url = "http://localhost:5000/modificaImagemUser"
 
-# Dados do usuário a serem enviados no POST
+# Caminho da imagem a ser enviada
+image_path = './Pokémon_Gengar_art.png'
+
+# Abrir e codificar a imagem em base64
+with open(image_path, 'rb') as img_file:
+    encoded_image = base64.b64encode(img_file.read()).decode('utf-8')  # Convertendo para string
+
+# Dados para enviar na requisição
 data = {
-    "email": "teste@example.com",
-    "nome": "bruno",
-    "senha": "senhaSegura123"
+    "nome": "bruno",  # Nome do usuário
+    "dado": encoded_image  # Imagem codificada em base64
 }
 
 # Fazendo a requisição POST
-response = requests.get(url)
+response = requests.post(url, json=data, headers={'Content-Type': 'application/json'})
 
 # Exibindo a resposta
 print(f"Status Code: {response.status_code}")

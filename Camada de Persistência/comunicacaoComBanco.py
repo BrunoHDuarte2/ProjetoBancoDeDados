@@ -1,13 +1,14 @@
 from flask import Flask, jsonify, request
 import psycopg2
 from flask_cors import CORS
+import base64
 app = Flask(__name__)
 CORS(app)
 
 DB = {
     "dbname": "projetobd", # Lembra de alterar pelo nome que você deu pro bd no seu pc 
     "user": "postgres",
-    "password": "mainPyke02!", # Por favor não subir com sua senha de verdade  :))
+    "password": "ERATESTEVIU", # Por favor não subir com sua senha de verdade  :))
     "host": "localhost",
     "port": "5432"
 }
@@ -33,8 +34,32 @@ def getUsuarios():
     usuarios = cur.fetchall()
     cur.close()
     conn.close()
-    response = jsonify([{"cpf": u[0], "nome": u[1]} for u in usuarios])
+    response = jsonify([{"nome": u[0]} for u in usuarios])
     return response
+
+@app.route('/modificaImagemUser', methods=['POST'])
+def insereImagemEmBase64():
+    try:
+        conn = getDbConnection()
+        cur = conn.cursor()
+        
+        data = request.json
+        imgEmB64 = base64.b64decode(data.get("dado"))  
+        nome = data.get("nome")
+        cur.execute("UPDATE Usuario SET Foto = %s WHERE nome = %s RETURNING *;", (imgEmB64, nome))
+        updated_user = cur.fetchone()
+        
+        conn.commit()
+        
+        cur.close()
+        conn.close()
+        
+        if updated_user:
+            return jsonify({"message": "Imagem atualizada com sucesso!"}), 200
+        else:
+            return jsonify({"message": "Usuário não encontrado!"}), 404
+    except Exception as e:
+        return jsonify({"error": f"Erro ao processar a requisição: {e}"}), 500
 
 @app.route('/usuarioSearch/<nome>', methods=['GET'])
 def getUsuario(nome):
