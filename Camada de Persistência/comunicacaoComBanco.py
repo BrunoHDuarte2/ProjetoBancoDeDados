@@ -36,17 +36,21 @@ def getUsuarios():
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
-@app.route('/usuarioSearch/<cpf>', methods=['GET'])
-def getUsuario(cpf):
+@app.route('/usuarioSearch/<nome>', methods=['GET'])
+def getUsuario(nome):
     conn = getDbConnection()
     cur = conn.cursor()
-    cur.execute("SELECT * FROM Usuario WHERE Cpf = %s;", (cpf,))
+    cur.execute("SELECT * FROM Usuario WHERE Nome = %s;", (nome,))
     usuario = cur.fetchone()
     cur.close()
     conn.close()
     if usuario:
-        return jsonify({"cpf": usuario[0], "nome": usuario[1]})
-    return jsonify({"error": "Usuário não encontrado"}), 404
+        const response = jsonify({"nome": usuario[0], "email": usuario[1], "senha": usuario[2], "foto": usuario[3]})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
+    const response = jsonify({"error": "Usuário não encontrado"}), 404
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 @app.route('/usuarioCreate', methods=['POST'])
 def createUsuario():

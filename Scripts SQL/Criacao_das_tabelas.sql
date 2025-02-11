@@ -1,7 +1,6 @@
 CREATE TABLE Usuario (
-	id_usuario serial PRIMARY KEY,
+	Nome varchar(35) PRIMARY KEY,
 	Email varchar(35) NOT NULL,
-	Nome varchar(35) NOT NULL,
 	Senha varchar(35) NOT NULL,
 	Foto bytea
 );
@@ -37,28 +36,28 @@ CREATE TABLE Item (
 
 CREATE TABLE Wishlist (
 	Id serial PRIMARY KEY,
-	id_usuario int,
-	FOREIGN KEY (id_usuario) REFERENCES Usuario (id_usuario)
+	id_usuario varchar(35),
+	FOREIGN KEY (id_usuario) REFERENCES Usuario (Nome)
 );
 
 CREATE TABLE Inventario (
 	Id_inventario serial PRIMARY KEY,
-	id_usuario int,
+	id_usuario varchar(35),
 	id_item int,
-	FOREIGN KEY (id_usuario) REFERENCES Usuario (id_usuario),
+	FOREIGN KEY (id_usuario) REFERENCES Usuario (Nome),
 	FOREIGN KEY (id_item) REFERENCES Item (id_item)
 	
 );
 
 CREATE TABLE Carteira (
-	id_usuario int,
+	id_usuario varchar(35),
 	saldo int NOT NULL,
-	FOREIGN KEY (id_usuario) REFERENCES Usuario (id_usuario)
+	FOREIGN KEY (id_usuario) REFERENCES Usuario (Nome)
 ); 
 
 CREATE TABLE Carrinho_compra (
 	id_item int,
-	id_usuario int,
+	id_usuario varchar(35),
 	FOREIGN KEY (id_item) REFERENCES Item (id_item),
-	FOREIGN KEY (id_usuario) REFERENCES Usuario (id_usuario)
+	FOREIGN KEY (id_usuario) REFERENCES Usuario (Nome)
 );

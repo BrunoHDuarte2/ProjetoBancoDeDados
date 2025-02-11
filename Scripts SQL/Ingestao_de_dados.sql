@@ -77,69 +77,69 @@ INSERT INTO Item (Nome, Descrição, Preco, Data_lancamento, id_produtora) VALUE
 
 -- Insert into Wishlist
 INSERT INTO Wishlist (id_usuario) VALUES
-(1),
-(2),
-(3),
-(4),
-(5);
+("1"),
+("2"),
+("3"),
+("4"),
+("5");
 
 -- Insert into Inventario (Owned Games)
 -- Zelda: Breath of the Wild 2 (Most Sold)
 INSERT INTO Inventario (id_usuario, id_item) VALUES
-(1, 4),
-(2, 4),
-(3, 4),
-(4, 4),
-(5, 4),
-(1, 4),
-(2, 4),
-(3, 4),
-(4, 4),
-(5, 4);
+("1", 4),
+("2", 4),
+("3", 4),
+("4", 4),
+("5", 4),
+("1", 4),
+("2", 4),
+("3", 4),
+("4", 4),
+("5", 4);
 
 -- GTA VI (Second Most Sold)
 INSERT INTO Inventario (id_usuario, id_item) VALUES
-(1, 3),
-(2, 3),
-(3, 3),
-(4, 3),
-(5, 3),
-(1, 3),
-(2, 3);
+("1", 3),
+("2", 3),
+("3", 3),
+("4", 3),
+("5", 3),
+("1", 3),
+("2", 3);
 
 -- Counter-Strike 2 (Third Most Sold)
 INSERT INTO Inventario (id_usuario, id_item) VALUES
-(1, 5),
-(2, 5),
-(3, 5),
-(4, 5),
-(5, 5);
+("1", 5),
+("2", 5),
+("3", 5),
+("4", 5),
+("5", 5);
 
 -- Assassin's Creed (Fourth Most Sold)
 INSERT INTO Inventario (id_usuario, id_item) VALUES
-(1, 1),
-(2, 1),
-(3, 1);
+("1", 1),
+("2", 1),
+("3", 1);
 
 -- FIFA 25 (4 Purchases)
 INSERT INTO Inventario (id_usuario, id_item) VALUES
-(1, 2),
-(2, 2),
-(3, 2),
-(4, 2);
+("1", 2),
+("2", 2),
+("3", 2),
+("4", 2);
 
 -- Insert into Carteira (Wallets)
 INSERT INTO Carteira (id_usuario, saldo) VALUES
-(1, 500),
-(2, 300),
-(3, 100),
-(4, 700),
-(5, 400);
+("1", 500),
+("2", 300),
+("3", 100),
+("4", 700),
+("5", 400);
 
 -- Insert into Carrinho_compra (Shopping Cart)
 INSERT INTO Carrinho_compra (id_item, id_usuario) VALUES
-(1, 1),
-(2, 2),
-(3, 3),
-(4, 4),
-(5, 5);
+(1, "1"),
+(2, "2"),
+(3, "3"),
+(4, "4"),
+(5, "5");

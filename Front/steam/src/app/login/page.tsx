@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Footer from "../components/footer";
 import { useState } from "react";
+import { signIn } from "../api/authAPI";
 
 export default function Login() {
   const [input, setInput] = useState({
@@ -12,7 +13,19 @@ export default function Login() {
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log("Login");
+    
+    try{
+      const response = await signIn(input);
+      if (response != false){
+        localStorage.setItem("token", response.token);
+        localStorage.setItem("user", JSON.stringify(response.user));
+      }
+
+      window.location.href = "/library";
+    } catch(error){
+      console.log(error);
+    }
+    
   }
 
   return (
