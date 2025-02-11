@@ -1,8 +1,8 @@
 import api from "../../utils/api";
 
-export const getUser = async (data: any) => {
+export const getUser = async (username: any) => {
   try {
-    const response = await api.get(`/usuarioSearch/${data.username}`)
+    const response = await api.get(`/usuarioSearch/${username}`)
     return response.data;
   } catch (error) {
     return error;

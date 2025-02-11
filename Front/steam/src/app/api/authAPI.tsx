@@ -4,8 +4,8 @@ import { getUser } from "./userAPI"
 
 export const signIn = async (data: any) => {
     const response = await getUser(data.username);
-    if (response.data.senha === data.password) {
-        return response.data;
+    if (response.senha === data.password) {
+        return response;
     }
     return false;
 }

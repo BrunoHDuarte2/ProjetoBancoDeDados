@@ -1,12 +1,13 @@
 from flask import Flask, jsonify, request
 import psycopg2
-
+from flask_cors import CORS
 app = Flask(__name__)
+CORS(app)
 
 DB = {
     "dbname": "projetobd", # Lembra de alterar pelo nome que você deu pro bd no seu pc 
     "user": "postgres",
-    "password": "senha", # Por favor não subir com sua senha de verdade  :))
+    "password": "mainPyke02!", # Por favor não subir com sua senha de verdade  :))
     "host": "localhost",
     "port": "5432"
 }
@@ -33,7 +34,6 @@ def getUsuarios():
     cur.close()
     conn.close()
     response = jsonify([{"cpf": u[0], "nome": u[1]} for u in usuarios])
-    response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
 @app.route('/usuarioSearch/<nome>', methods=['GET'])
@@ -45,13 +45,9 @@ def getUsuario(nome):
     cur.close()
     conn.close()
     if usuario:
-        const response = jsonify({"nome": usuario[0], "email": usuario[1], "senha": usuario[2], "foto": usuario[3]})
-        response.headers.add('Access-Control-Allow-Origin', '*')
-        return response
-    const response = jsonify({"error": "Usuário não encontrado"}), 404
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    return response
-
+        return jsonify({"nome": usuario[0], "email": usuario[1], "senha": usuario[2], "foto": usuario[3]})
+    return jsonify({"error": "Usuário não encontrado"}), 404
+    
 @app.route('/usuarioCreate', methods=['POST'])
 def createUsuario():
     data = request.json
@@ -61,16 +57,14 @@ def createUsuario():
     conn = getDbConnection()
     cur = conn.cursor()
     try:
-        cur.execute("INSERT INTO Usuario (Email, Nome, Senha) VALUES (%s, %s);", (email, nome, senha))
+        cur.execute("INSERT INTO Usuario (Email, Nome, Senha) VALUES (%s, %s, %s);", (email, nome, senha))
         conn.commit()
         cur.close()
         conn.close()
         response = jsonify({"message": "Usuário criado com sucesso!"}), 201
-        response.headers.add('Access-Control-Allow-Origin', '*')
         return response
     except psycopg2.Error as e:
         response = jsonify({"error": str(e)}), 400
-        response.headers.add('Access-Control-Allow-Origin', '*')
         return response
 
 @app.route('/usuarioUpdate/<cpf>', methods=['PUT'])
@@ -238,16 +232,14 @@ def getItens():
 def getItem(idItem):
     conn = getDbConnection()
     cur = conn.cursor()
-    cur.execute("SELECT * FROM Item WHERE idItem = %s;", (idItem,))
+    cur.execute("SELECT * FROM Item WHERE id_item = %s;", (idItem,))
     item = cur.fetchone()
     cur.close()
     conn.close()
     if item:
         response = jsonify({"idItem": item[0], "nome": item[1], "descricao": item[2], "preco": item[3], "dataLancamento": item[4], "idProdutora": item[5]})
-        response.headers.add('Access-Control-Allow-Origin', '*')
         return response
     response = jsonify({"error": "Item não encontrado"}), 404
-    response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
 @app.route('/itemCreate', methods=['POST'])

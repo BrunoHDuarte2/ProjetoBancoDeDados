@@ -16,8 +16,8 @@ export default function Login() {
     
     try{
       const response = await signIn(input);
+      
       if (response != false){
-        localStorage.setItem("token", response.token);
         localStorage.setItem("user", JSON.stringify(response.user));
       }
 
