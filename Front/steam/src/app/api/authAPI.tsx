@@ -1,5 +1,7 @@
 import api from "../../utils/api";
 import { createUser } from "./userAPI";
+import { createCart } from "./cartAPI";
+import { createInventory } from "./inventoryAPI";
 import { getUser } from "./userAPI"
 
 export const signIn = async (data: any) => {
@@ -11,5 +13,7 @@ export const signIn = async (data: any) => {
 }
 
 export const signUp = async (data: any) => {
-    const response = await createUser(data);
+    await createUser(data);
+    await createCart(data.username);
+    await createInventory(data.username);
 }
