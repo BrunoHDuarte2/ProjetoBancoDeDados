@@ -8,7 +8,7 @@ export default function Library() {
   const games = ["Super Mario Odyssey", "The Legend of Zelda: Breath of the Wild", "Mario Kart 8", "Mario Kart 9","Pokémon: Legends Z-A", "GTA V", "GTA VI"];
 
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+    <div className="bg-gray-700 grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
         <Header bgColor="black"/>
       <main className="flex flex-col gap-4 row-start-2 items-center sm:items-start">
        <p className="text-5xl text-white"> <ImBooks /> Sua Biblioteca </p>

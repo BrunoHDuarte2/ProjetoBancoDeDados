@@ -1,10 +1,13 @@
 CREATE TABLE Usuario (
-	Cpf varchar(11) PRIMARY KEY,
-	Nome varchar(35) NOT NULL
+	id_usuario serial PRIMARY KEY,
+	Email varchar(35) NOT NULL,
+	Nome varchar(35) NOT NULL,
+	Senha varchar(35) NOT NULL,
+	Foto bytea
 );
 
 CREATE TABLE Pagamento (
-	id_pagamento int PRIMARY KEY,
+	id_pagamento serial PRIMARY KEY,
 	Valor int NOT NULL,
 	Data varchar(10) NOT NULL,
 	Status varchar(20) NOT NULL
@@ -16,13 +19,13 @@ CREATE TABLE Produtora (
 );
 
 CREATE TABLE Avaliacao (
-	id_avaliacao int PRIMARY KEY,
+	id_avaliacao serial PRIMARY KEY,
 	Nota int NOT NULL,
 	Comentario varchar(150) NOT NULL
 );
 
 CREATE TABLE Item (
-	id_item int PRIMARY KEY,
+	id_item serial PRIMARY KEY,
 	Nome varchar(30) NOT NULL,
 	Descrição varchar(100) NOT NULL,
 	Preco int NOT NULL,
@@ -33,29 +36,29 @@ CREATE TABLE Item (
 
 
 CREATE TABLE Wishlist (
-	Id int PRIMARY KEY,
-	id_usuario varchar(11),
-	FOREIGN KEY (id_usuario) REFERENCES Usuario (Cpf)
+	Id serial PRIMARY KEY,
+	id_usuario int,
+	FOREIGN KEY (id_usuario) REFERENCES Usuario (id_usuario)
 );
 
 CREATE TABLE Inventario (
-	Id_inventario int PRIMARY KEY,
-	id_usuario varchar(11),
+	Id_inventario serial PRIMARY KEY,
+	id_usuario int,
 	id_item int,
-	FOREIGN KEY (id_usuario) REFERENCES Usuario (Cpf),
+	FOREIGN KEY (id_usuario) REFERENCES Usuario (id_usuario),
 	FOREIGN KEY (id_item) REFERENCES Item (id_item)
 	
 );
 
 CREATE TABLE Carteira (
-	id_usuario varchar(11),
+	id_usuario int,
 	saldo int NOT NULL,
-	FOREIGN KEY (id_usuario) REFERENCES Usuario (Cpf)
+	FOREIGN KEY (id_usuario) REFERENCES Usuario (id_usuario)
 ); 
 
 CREATE TABLE Carrinho_compra (
 	id_item int,
-	id_usuario varchar(11),
+	id_usuario int,
 	FOREIGN KEY (id_item) REFERENCES Item (id_item),
-	FOREIGN KEY (id_usuario) REFERENCES Usuario (Cpf)
+	FOREIGN KEY (id_usuario) REFERENCES Usuario (id_usuario)
 );

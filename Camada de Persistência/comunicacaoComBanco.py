@@ -6,7 +6,7 @@ app = Flask(__name__)
 DB = {
     "dbname": "projetobd", # Lembra de alterar pelo nome que você deu pro bd no seu pc 
     "user": "postgres",
-    "password": "senhaQueVoceUsaNoPgAdmin :)", # Por favor não subir com sua senha de verdade  :))
+    "password": "senha", # Por favor não subir com sua senha de verdade  :))
     "host": "localhost",
     "port": "5432"
 }
@@ -32,7 +32,9 @@ def getUsuarios():
     usuarios = cur.fetchall()
     cur.close()
     conn.close()
-    return jsonify([{"cpf": u[0], "nome": u[1]} for u in usuarios])
+    response = jsonify([{"cpf": u[0], "nome": u[1]} for u in usuarios])
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 @app.route('/usuarioSearch/<cpf>', methods=['GET'])
 def getUsuario(cpf):
@@ -49,18 +51,23 @@ def getUsuario(cpf):
 @app.route('/usuarioCreate', methods=['POST'])
 def createUsuario():
     data = request.json
-    cpf = data.get("cpf")
+    email = data.get("email")
     nome = data.get("nome")
+    senha = data.get("senha")
     conn = getDbConnection()
     cur = conn.cursor()
     try:
-        cur.execute("INSERT INTO Usuario (Cpf, Nome) VALUES (%s, %s);", (cpf, nome))
+        cur.execute("INSERT INTO Usuario (Email, Nome, Senha) VALUES (%s, %s);", (email, nome, senha))
         conn.commit()
         cur.close()
         conn.close()
-        return jsonify({"message": "Usuário criado com sucesso!"}), 201
+        response = jsonify({"message": "Usuário criado com sucesso!"}), 201
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
     except psycopg2.Error as e:
-        return jsonify({"error": str(e)}), 400
+        response = jsonify({"error": str(e)}), 400
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
 
 @app.route('/usuarioUpdate/<cpf>', methods=['PUT'])
 def updateUsuario(cpf):
@@ -219,7 +226,25 @@ def getItens():
     itens = cur.fetchall()
     cur.close()
     conn.close()
-    return jsonify([{"idItem": i[0], "nome": i[1], "descricao": i[2], "preco": i[3], "dataLancamento": i[4], "idProdutora": i[5]} for i in itens])
+    response = jsonify([{"idItem": i[0], "nome": i[1], "descricao": i[2], "preco": i[3], "dataLancamento": i[4], "idProdutora": i[5]} for i in itens])
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
+
+@app.route('/itemSearch/<int:idItem>', methods=['GET'])
+def getItem(idItem):
+    conn = getDbConnection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM Item WHERE idItem = %s;", (idItem,))
+    item = cur.fetchone()
+    cur.close()
+    conn.close()
+    if item:
+        response = jsonify({"idItem": item[0], "nome": item[1], "descricao": item[2], "preco": item[3], "dataLancamento": item[4], "idProdutora": item[5]})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
+    response = jsonify({"error": "Item não encontrado"}), 404
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 @app.route('/itemCreate', methods=['POST'])
 def addItem():
@@ -252,7 +277,9 @@ def updateItem(idItem):
     cur.close()
     conn.close()
     if updatedItem:
-        return jsonify({"idItem": updatedItem[0], "nome": updatedItem[1], "descricao": updatedItem[2]})
+        response = jsonify({"idItem": updatedItem[0], "nome": updatedItem[1], "descricao": updatedItem[2]})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        return response
     return jsonify({"error": "Item não encontrado"}), 404
 
 @app.route('/itemDelete/<int:idItem>', methods=['DELETE'])
@@ -263,7 +290,9 @@ def deleteItem(idItem):
     conn.commit()
     cur.close()
     conn.close()
-    return jsonify({"message": "Item deletado com sucesso!"})
+    response = jsonify({"message": "Item deletado com sucesso!"})
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    return response
 
 
 if __name__ == '__main__':

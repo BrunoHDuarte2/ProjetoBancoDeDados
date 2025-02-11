@@ -8,7 +8,7 @@ export default function Cart() {
   const games = ["Super Mario Odyssey", "The Legend of Zelda: Breath of the Wild", "Mario Kart 8", "Mario Kart 9","Pokémon: Legends Z-A", "GTA V", "GTA VI"];
 
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+    <div className="bg-gray-700 grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
         <Header bgColor=""/>
       <main className="flex flex-col row-start-2 items-center sm:items-start gap-4">
        <p className="text-5xl text-white"> <FaShoppingCart /> Seu Carrinho de Compras</p>
@@ -37,7 +37,7 @@ export default function Cart() {
             </div>))}
           </div>
           <div>
-            <div className= "fixed bg-gray-700 p-4 rounded-lg">
+            <div className= "fixed bg-gray-800 p-4 gap-3 rounded-lg">
 
               <div className="flex">
                 <p className="text-xl bold text-gray-500">Quantidade:</p> <p className="text-xl bold text-white">0</p>

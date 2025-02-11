@@ -3,6 +3,7 @@
 import { GiTurtle } from "react-icons/gi";
 import { useState, useEffect } from "react";
 import { IoIosArrowDown } from "react-icons/io";
+import { FaSteam } from "react-icons/fa";
 import Link from 'next/link';
 import Image from "next/image";
 
@@ -66,19 +67,10 @@ const Header: React.FC<HeaderProps> = ({ }) => {
   }, []);
 
   return (
-    <div className={`bg-gray-700 border-white border-b-4 fixed top-0 left-0 w-full z-50`}>
+    <div className={`bg-gray-800 border-white border-b-4 fixed top-0 left-0 w-full z-50`}>
       <header className="md:px-24 md:py-8 px-8 py-3 top-0 flex-wrap z-[20] mx-auto flex w-full items-center justify-between">
-        <div className="flex items-center">
-          <Link href='/' legacyBehavior>
-            <Image
-              className="dark:invert"
-              src="/steam_icon.svg"
-              alt="Steam logo"
-              width={60}
-              height={38}
-              priority
-              />
-          </Link>
+        <div className="flex items-center text-white text-6xl">
+            <FaSteam />
         </div>
         <div className="hidden md:flex flex-row items-center space-x-4">
           <Links />
