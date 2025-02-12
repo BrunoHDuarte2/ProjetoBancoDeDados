@@ -2,8 +2,20 @@ import requests
 import base64
 
 # URL da API
-url = "http://localhost:5000/modificaImagemUser"
+url = "http://localhost:5000/usuarioGet"
 
+data = {
+    "email": "quismudarDnv@teste.com",
+    "senha": "eunaoseifazersenha" 
+}
+
+response = requests.get(url)
+
+# Exibindo a resposta
+print(f"Status Code: {response.status_code}")
+print(f"Response JSON: {response.text}")
+
+"""
 # Caminho da imagem a ser enviada
 image_path = './Pokémon_Gengar_art.png'
 
@@ -22,4 +34,4 @@ response = requests.post(url, json=data, headers={'Content-Type': 'application/j
 
 # Exibindo a resposta
 print(f"Status Code: {response.status_code}")
-print(f"Response JSON: {response.text}")
+print(f"Response JSON: {response.text}")"""

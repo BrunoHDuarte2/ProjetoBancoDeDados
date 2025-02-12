@@ -6,9 +6,9 @@ app = Flask(__name__)
 CORS(app)
 
 DB = {
-    "dbname": "projetobd", # Lembra de alterar pelo nome que você deu pro bd no seu pc 
+    "dbname": "projbd", # Lembra de alterar pelo nome que você deu pro bd no seu pc 
     "user": "postgres",
-    "password": "ERATESTEVIU", # Por favor não subir com sua senha de verdade  :))
+    "password": "mainPyke02!", # Por favor não subir com sua senha de verdade  :))
     "host": "localhost",
     "port": "5432"
 }
@@ -92,28 +92,30 @@ def createUsuario():
         response = jsonify({"error": str(e)}), 400
         return response
 
-@app.route('/usuarioUpdate/<cpf>', methods=['PUT'])
-def updateUsuario(cpf):
+@app.route('/usuarioUpdate/<nome>', methods=['PUT'])
+def updateUsuario(nome):
     data = request.json
-    novoNome = data.get("nome")
-    if not novoNome:
-        return jsonify({"error": "O campo 'nome' é obrigatório"}), 400
+    email = data.get("email")
+    senha = data.get("senha")
     conn = getDbConnection()
     cur = conn.cursor()
-    cur.execute("UPDATE Usuario SET Nome = %s WHERE Cpf = %s RETURNING *;", (novoNome, cpf))
+    if email:
+        cur.execute("UPDATE Usuario SET email = %s WHERE nome = %s RETURNING *;", (email, nome))
+    if senha:
+        cur.execute("UPDATE Usuario SET senha = %s WHERE nome = %s RETURNING *;", (senha, nome))
     updatedUser = cur.fetchone()
     conn.commit()
     cur.close()
     conn.close()
     if updatedUser:
-        return jsonify({"cpf": updatedUser[0], "nome": updatedUser[1]})
+        return jsonify({"nome": updatedUser[0], "email": updatedUser[1],"senha": updatedUser[2], "foto": updatedUser[3]})
     return jsonify({"error": "Usuário não encontrado"}), 404
 
-@app.route('/usuarioDelete/<cpf>', methods=['DELETE'])
-def deleteUsuario(cpf):
+@app.route('/usuarioDelete/<nome>', methods=['DELETE'])
+def deleteUsuario(nome):
     conn = getDbConnection()
     cur = conn.cursor()
-    cur.execute("DELETE FROM Usuario WHERE Cpf = %s;", (cpf,))
+    cur.execute("DELETE FROM Usuario WHERE nome = %s;", (nome,))
     conn.commit()
     cur.close()
     conn.close()
@@ -314,6 +316,73 @@ def deleteItem(idItem):
     response = jsonify({"message": "Item deletado com sucesso!"})
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
+
+@app.route('/produtoraGet', methods=['GET'])
+def getProdutoras():
+    conn = getDbConnection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM Produtora;")
+    prod = cur.fetchall()
+    cur.close()
+    conn.close()
+    response = jsonify([{"nome": p[1]} for p in prod])
+    return response
+
+@app.route('/produtoraSearch/<nome>', methods=['GET'])
+def getProdutora(id):
+    conn = getDbConnection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM Produtora WHERE id_produtora = %s;", (id,))
+    prod = cur.fetchone()
+    cur.close()
+    conn.close()
+    if prod:
+        return jsonify({"id": prod[0], "nome": prod[1]})
+    return jsonify({"error": "Produtora não encontrada"}), 404
+    
+@app.route('/produtoraCreate', methods=['POST'])
+def createProdutora():
+    data = request.json
+    nome = data.get("nome")
+    conn = getDbConnection()
+    cur = conn.cursor()
+    try:
+        cur.execute("INSERT INTO Produtora (Nome) VALUES (%s);", ( nome,))
+        conn.commit()
+        cur.close()
+        conn.close()
+        response = jsonify({"message": "Produtora criada com sucesso!"}), 201
+        return response
+    except psycopg2.Error as e:
+        response = jsonify({"error": str(e)}), 400
+        return response
+
+@app.route('/produtoraUpdate/<id>', methods=['PUT'])
+def updateProdutora(cpf):
+    data = request.json
+    novoNome = data.get("nome")
+    if not novoNome:
+        return jsonify({"error": "O campo 'nome' é obrigatório"}), 400
+    conn = getDbConnection()
+    cur = conn.cursor()
+    cur.execute("UPDATE Usuario SET Nome = %s WHERE Cpf = %s RETURNING *;", (novoNome, cpf))
+    updatedUser = cur.fetchone()
+    conn.commit()
+    cur.close()
+    conn.close()
+    if updatedUser:
+        return jsonify({"cpf": updatedUser[0], "nome": updatedUser[1]})
+    return jsonify({"error": "Usuário não encontrado"}), 404
+
+@app.route('/produtoraDelete/<cpf>', methods=['DELETE'])
+def deleteProdutora(cpf):
+    conn = getDbConnection()
+    cur = conn.cursor()
+    cur.execute("DELETE FROM Usuario WHERE Cpf = %s;", (cpf,))
+    conn.commit()
+    cur.close()
+    conn.close()
+    return jsonify({"message": "Usuário deletado com sucesso!"})
 
 
 if __name__ == '__main__':
