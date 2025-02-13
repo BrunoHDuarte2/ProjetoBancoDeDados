@@ -48,6 +48,17 @@ def getJogos(nome):
     response = jsonify({"jogos": jogos})
     return response
 
+@app.route('/carrinhoDeComprasDeUmUsuario/<nome>', methods=['GET'])
+def getCarrinhoDeCompra(nome):
+    conn = getDbConnection()
+    cur = conn.cursor()
+    cur.execute("""SELECT nome_item FROM public."carrinhoDeCompra" WHERE id_usuario = (%s);""", (nome,))
+    jogos = cur.fetchall()
+    cur.close()
+    conn.close()
+    response = jsonify({"jogos": jogos})
+    return response
+
 
 
 @app.route('/modificaImagemUser', methods=['POST'])
