@@ -5,4 +5,5 @@ export interface Game {
     descricao: string;
     dataLancamento: string;
     idProdutora: number;
+    foto: string;
 }

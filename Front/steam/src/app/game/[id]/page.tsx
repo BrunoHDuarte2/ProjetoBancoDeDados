@@ -25,7 +25,6 @@ const GameProfile: React.FC<GameProfileProps> = ({ params }) => {
     const addToCart = async () => {
         try {
             await addGameToCart(code!, localStorage.getItem("user")!);
-
         } catch (error) {
             console.log(error);
         }

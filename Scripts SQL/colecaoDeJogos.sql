@@ -1,3 +1,4 @@
+ CREATE VIEW colecaoDeJogos AS
  SELECT i.id_usuario,
     it.nome AS nome_item
    FROM inventario i

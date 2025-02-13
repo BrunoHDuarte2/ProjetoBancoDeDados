@@ -13,8 +13,8 @@ CREATE TABLE Pagamento (
 );
 
 CREATE TABLE Produtora (
-    Id_produtora varchar(14) PRIMARY KEY,
-    Nome varchar(40) NOT NULL
+    Nome varchar(40) PRIMARY KEY,
+    Senha varchar(40)
 );
 
 CREATE TABLE Avaliacao (
@@ -29,8 +29,9 @@ CREATE TABLE Item (
     Descricao varchar(100) NOT NULL,
     Preco int NOT NULL,
     Data_lancamento varchar(10) NOT NULL,
-    id_produtora varchar(14),
-    FOREIGN KEY (id_produtora) REFERENCES Produtora(Id_produtora) ON DELETE CASCADE
+    Nome_prod varchar(40),
+    foto bytea,
+    FOREIGN KEY (Nome_prod) REFERENCES Produtora(Nome) ON DELETE CASCADE
 );
 
 CREATE TABLE Wishlist (

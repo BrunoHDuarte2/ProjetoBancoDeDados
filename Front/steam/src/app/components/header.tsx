@@ -6,9 +6,10 @@ import { IoIosArrowDown } from "react-icons/io";
 import { FaSteam } from "react-icons/fa";
 import Link from 'next/link';
 import Image from "next/image";
-import { getUser, deleteUser } from "../api/userAPI";
+import { getUser, deleteUser, updateUser, updatePicture } from "../api/userAPI";
 import { getGames } from "../api/inventoryAPI";
 import { User } from "../../types/user";
+import { Game } from "../../types/games"
 
 import { IoPerson } from "react-icons/io5";
 import { IoIosCloseCircleOutline } from "react-icons/io";
@@ -30,8 +31,14 @@ function Links() {
     const [user, setUser] = useState<User>();
     const [isEditable, setIsEditable] = useState([false, false, false]);
     const [selectedOption, setSelectedOption] = useState("Conta");
-    const [ownedGames, setOwnedGames] = useState(["Mario Odyssey", "Zelda Breath of the Wild", "Mario Kart 8 Deluxe", "Super Smash Bros Ultimate", "Splatoon 2", "Animal Crossing New Horizons"]);
+    const [ownedGames, setOwnedGames] = useState<Game[]>();
+    const [foto, setFoto] = useState<File>();
     const options = [{text:"Conta",icon:<IoPerson />},{text:"Biblioteca",icon:<HiMiniSquares2X2 />}];
+    const [input, setInput] = useState({
+      nome: "",
+      email: "",
+      senha: ""
+    });
 
     const handleDelete = async () => {
       await deleteUser(localStorage.getItem("user"));
@@ -46,13 +53,44 @@ function Links() {
 
     const fetchGames = async () => {
       const response = await getGames(localStorage.getItem("user")!);
-      setOwnedGames(response);
+      setOwnedGames(response.jogos);
     }
+
+    const updateUsuario = async () => {
+      await updateUser(input);
+    }
+    
+    const updateUserPicture = async (data: any) => {
+      await updatePicture(data, user);
+    }
+
+    const updateFoto = async () => {
+      if (foto) {
+        const reader = new FileReader();
+        reader.readAsDataURL(foto);
+        reader.onload = () => {
+          const dataURL = reader.result;
+          updateUserPicture(dataURL);    
+        }
+      }
+    }
+
+    useEffect(() => {
+
+    })
 
     useEffect (() => {
       fetchUser();
       fetchGames();
     }, []);
+
+    useEffect (() => {
+      console.log(input);
+    }, [input]);
+
+    useEffect(() => {
+      setInput({nome: user?.nome!, email: user?.email!, senha: user?.senha!});
+    }, [user])
 
     return (
       <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 flex items-center justify-center">
@@ -86,29 +124,40 @@ function Links() {
                         height={60}
                         priority
                         className="mx-auto border border-white-900 rounded-sm"/>
-                      <button className="absolute rounded-full bg-white left-[90%] text-xl p-2 border-blue-400 border text-black"><FaEdit /></button>
+                      <label htmlFor="file" className="absolute rounded-full bg-white left-[90%] text-xl p-2 border-blue-400 border text-black"
+                      onClick={updateFoto}
+                      ><FaEdit /></label>
+
+                      <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg, image/jpg" 
+                      onChange={(e) => {setFoto(e.target?.files![0])}}/>
                     </div>
 
                     <form>
                     <div className="flex flex-col">
                         <label className="text-white" htmlFor="username">Email</label>
                         <div className="relative items-center inline-flex justify-between">
-                          <button className="absolute left-[90%] bg-gray-800 h-full border text-white border-x-gray-800"><FaEdit /></button>
-                          <input type="text" id="email" name="email" value={user?.email} className="bg-gray-800 shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline" />
+                          <button className="absolute left-[90%] bg-gray-800 h-full border text-white border-x-gray-800"
+                          onClick={updateUsuario}><FaEdit /></button>
+                          <input type="text" id="email" name="email" defaultValue={user?.email} className="bg-gray-800 shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline" 
+                          onChange={(e)=>setInput({...input, email: e.target.value})}/>
                         </div>  
                       </div>
                       <div className="flex flex-col">
                         <label className="text-white" htmlFor="username">Nome de Usuário</label>
                         <div className="relative items-center inline-flex">
-                          <input type="text" id="username" name="username" value={user?.nome} className="bg-gray-800 shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline" />
-                          <button className="absolute left-[90%] bg-gray-800 h-full border text-white border-x-gray-800"><FaEdit /></button>
+                          <input type="text" id="username" name="username" defaultValue={user?.nome} className="bg-gray-800 shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline" 
+                          onChange={(e)=>setInput({...input, nome: e.target.value})}/>
+                          <button className="absolute left-[90%] bg-gray-800 h-full border text-white border-x-gray-800"
+                          onClick={updateUsuario}><FaEdit /></button>
                         </div>
                       </div>
                       <div className="flex flex-col">
                         <label className="text-white" htmlFor="password">Senha</label>
                         <div className="relative items-center inline-flex">
-                          <input type="password" id="password" name="password" value={user?.senha} className="bg-gray-800 shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline" />
-                          <button className="absolute left-[90%] bg-gray-800 h-full border text-white border-x-gray-800"><FaEdit /></button>
+                          <input type="password" id="password" name="password" value={user?.senha} className="bg-gray-800 shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline" 
+                          onChange={(e)=>setInput({...input, senha: e.target.value})}/>
+                          <button className="absolute left-[90%] bg-gray-800 h-full border text-white border-x-gray-800"
+                          onClick={updateUsuario}><FaEdit /></button>
                         </div>
                       </div>
                   </form>
@@ -131,7 +180,7 @@ function Links() {
                     Ao apagar sua conta, suas licenças serão expiradas e todos os seus itens serão perdidos permanentemente. 
                 </div>
                 <button className="font-semibold rounded-lg text-white border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-red-500 text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 bg-red-600"
-                onClick={()=>handleDelete}>
+                onClick={handleDelete}>
                 Prosseguir com o apagamento</button>
               </div> :
               selectedOption === "Biblioteca" ? <div className="flex flex-col p-2 gap-4 items-center">
@@ -139,14 +188,14 @@ function Links() {
                   Jogos Adquiridos
                 </h1>
                 <div className="grid grid-cols-4 gap-4">
-                {ownedGames.map((game) => (
-                  <div key={game} className="rounded-lg shadow-md overflow-hidden relative">
+                {ownedGames!.map((game) => (
+                  <div key={game.idItem} className="rounded-lg shadow-md overflow-hidden relative">
                     <div className="bg-white flex items-center p-1 items-center justify-between h-10">
-                      <h2 className="text-black text-sm font-bold text-left">{game}</h2>
+                      <h2 className="text-black text-sm font-bold text-left">{game.nome}</h2>
                     </div>
 
-                    <img src="mario.avif"
-                    alt={game} className="w-full h-50 object-cover" />
+                    <img src={"mario.avif"}
+                    alt={game.nome} className="w-full h-50 object-cover" />
 
                     <button className="flex text-white items-center p-1 justify-between w-full h-30 object-cover bg-red-500 hover:bg-red-400">
                       Pedir Reembolso

@@ -17,7 +17,7 @@ export default function Signup() {
     try {
       if (input.senha == input.retry){
         await createUser(input);
-        window.location.href = "/login";
+        window.location.href = "/login-produtora";
       }
     } catch(error) {}
   }

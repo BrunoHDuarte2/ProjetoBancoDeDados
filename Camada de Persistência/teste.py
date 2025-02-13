@@ -2,36 +2,27 @@ import requests
 import base64
 
 # URL da API
-url = "http://localhost:5000/usuarioGet"
+url = "http://localhost:5000//modificaImagemItem/13"
 
-data = {
-    "email": "quismudarDnv@teste.com",
-    "senha": "eunaoseifazersenha" 
-}
-
-response = requests.get(url)
-
-# Exibindo a resposta
-print(f"Status Code: {response.status_code}")
-print(f"Response JSON: {response.text}")
 
 """
-# Caminho da imagem a ser enviada
-image_path = './Pokémon_Gengar_art.png'
+    nome = data.get("nome")
+    descricao = data.get("descricao")
+    preco = data.get("preco")
+    dataLancamento = data.get("dataLancamento")
+    nome_prod = data.get("nomeProdutora")
+    foto = data.get("foto")
+"""
 
-# Abrir e codificar a imagem em base64
-with open(image_path, 'rb') as img_file:
+
+with open('images.jpg', 'rb') as img_file:
     encoded_image = base64.b64encode(img_file.read()).decode('utf-8')  # Convertendo para string
 
-# Dados para enviar na requisição
 data = {
-    "nome": "bruno",  # Nome do usuário
-    "dado": encoded_image  # Imagem codificada em base64
+    "dado": encoded_image
 }
 
-# Fazendo a requisição POST
-response = requests.post(url, json=data, headers={'Content-Type': 'application/json'})
 
-# Exibindo a resposta
+response = requests.post(url, json=data, headers={'Content-Type': 'application/json'})
 print(f"Status Code: {response.status_code}")
-print(f"Response JSON: {response.text}")"""
+print(f"Response JSON: {response.text}")

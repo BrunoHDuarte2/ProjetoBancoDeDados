@@ -8,7 +8,7 @@ CORS(app)
 DB = {
     "dbname": "projetobd", # Lembra de alterar pelo nome que você deu pro bd no seu pc 
     "user": "postgres",
-    "password": "senha", # Por favor não subir com sua senha de verdade  :))
+    "password": "mainPyke02!", # Por favor não subir com sua senha de verdade  :))
     "host": "localhost",
     "port": "5432"
 }
@@ -41,7 +41,7 @@ def getUsuarios():
 def getJogos(nome):
     conn = getDbConnection()
     cur = conn.cursor()
-    cur.execute("""SELECT nome_item FROM public."colecaoDeJogos" WHERE id_usuario = (%s);""", (nome,))
+    cur.execute("""SELECT nome_item, foto FROM public."colecaoDeJogos" WHERE id_usuario = (%s);""", (nome,))
     jogos = cur.fetchall()
     cur.close()
     conn.close()
@@ -52,7 +52,7 @@ def getJogos(nome):
 def getCarrinhoDeCompra(nome):
     conn = getDbConnection()
     cur = conn.cursor()
-    cur.execute("""SELECT nome_item FROM public."carrinhoDeCompra" WHERE id_usuario = (%s);""", (nome,))
+    cur.execute("""SELECT nome_item, preco, foto FROM public."carrinhoDeCompra" WHERE id_usuario = (%s);""", (nome,))
     jogos = cur.fetchall()
     cur.close()
     conn.close()
@@ -60,16 +60,40 @@ def getCarrinhoDeCompra(nome):
     return response
 
 
-
-@app.route('/modificaImagemUser', methods=['POST'])
-def insereImagemEmBase64():
+@app.route('/modificaImagemItem/<id>', methods=['POST'])
+def insereImagemEmBase64Item(id):
     try:
         conn = getDbConnection()
         cur = conn.cursor()
         
         data = request.json
         imgEmB64 = base64.b64decode(data.get("dado"))  
-        nome = data.get("nome")
+        
+        cur.execute("UPDATE Item SET Foto = %s WHERE id_item = %s RETURNING *;", (imgEmB64, id))
+        updated_user = cur.fetchone()
+        
+        conn.commit()
+        
+        cur.close()
+        conn.close()
+        
+        if updated_user:
+            return jsonify({"message": "Imagem atualizada com sucesso!"}), 200
+        else:
+            return jsonify({"message": "Usuário não encontrado!"}), 404
+    except Exception as e:
+        return jsonify({"error": f"Erro ao processar a requisição: {e}"}), 500
+
+
+@app.route('/modificaImagemUser/<nome>', methods=['POST'])
+def insereImagemEmBase64(nome):
+    try:
+        conn = getDbConnection()
+        cur = conn.cursor()
+        
+        data = request.json
+        imgEmB64 = base64.b64decode(data.get("dado"))  
+        
         cur.execute("UPDATE Usuario SET Foto = %s WHERE nome = %s RETURNING *;", (imgEmB64, nome))
         updated_user = cur.fetchone()
         
@@ -276,7 +300,6 @@ def getItens():
     cur.close()
     conn.close()
     response = jsonify([{"idItem": i[0], "nome": i[1], "descricao": i[2], "preco": i[3], "dataLancamento": i[4], "idProdutora": i[5]} for i in itens])
-    response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
 @app.route('/itemSearch/<int:idItem>', methods=['GET'])
@@ -300,11 +323,19 @@ def addItem():
     descricao = data.get("descricao")
     preco = data.get("preco")
     dataLancamento = data.get("dataLancamento")
-    idProdutora = data.get("idProdutora")
+    nome_prod = data.get("nomeProdutora")
+    foto = data.get("foto")
     conn = getDbConnection()
     cur = conn.cursor()
-    cur.execute("INSERT INTO Item (Nome, Descricao, Preco, Data_lancamento, idProdutora) VALUES (%s, %s, %s, %s, %s);", 
-                (nome, descricao, preco, dataLancamento, idProdutora))
+    if foto:
+        imgEmB64 = base64.b64decode(foto) 
+        cur.execute("INSERT INTO Item (Nome, Descricao, Preco, Data_lancamento, nome_prod, foto) VALUES (%s, %s, %s, %s, %s, %s);", 
+                (nome, descricao, preco, dataLancamento, nome_prod, imgEmB64))
+    else:
+        with open('mario.png', 'rb') as img_file:
+            encoded_image = base64.b64encode(img_file.read()).decode('utf-8')
+        cur.execute("INSERT INTO Item (Nome, Descricao, Preco, Data_lancamento, nome_prod, foto) VALUES (%s, %s, %s, %s, %s,%s);", 
+                (nome, descricao, preco, dataLancamento, nome_prod, encoded_image))
     conn.commit()
     cur.close()
     conn.close()
@@ -315,30 +346,29 @@ def updateItem(idItem):
     data = request.json
     preco = data.get("preco")
     descricao = data.get("descricao")
+    foto = data.get("foto")
     conn = getDbConnection()
     cur = conn.cursor()
-    cur.execute("UPDATE Item SET Preco = %s, Descricao = %s WHERE idItem = %s RETURNING *;", 
-                (preco, descricao, idItem))
+    cur.execute("UPDATE Item SET Preco = %s, Descricao = %s, Foto = %s WHERE idItem = %s RETURNING *;", 
+                (preco, descricao, foto ,idItem))
     updatedItem = cur.fetchone()
     conn.commit()
     cur.close()
     conn.close()
     if updatedItem:
         response = jsonify({"idItem": updatedItem[0], "nome": updatedItem[1], "descricao": updatedItem[2]})
-        response.headers.add('Access-Control-Allow-Origin', '*')
         return response
     return jsonify({"error": "Item não encontrado"}), 404
 
-@app.route('/itemDelete/<int:idItem>', methods=['DELETE'])
-def deleteItem(idItem):
+@app.route('/itemDelete/<nome>', methods=['DELETE'])
+def deleteItem(nome):
     conn = getDbConnection()
     cur = conn.cursor()
-    cur.execute("DELETE FROM Item WHERE idItem = %s;", (idItem,))
+    cur.execute("DELETE FROM Item WHERE nome = %s;", (nome,))
     conn.commit()
     cur.close()
     conn.close()
     response = jsonify({"message": "Item deletado com sucesso!"})
-    response.headers.add('Access-Control-Allow-Origin', '*')
     return response
 
 @app.route('/produtoraGet', methods=['GET'])
@@ -353,25 +383,57 @@ def getProdutoras():
     return response
 
 @app.route('/produtoraSearch/<nome>', methods=['GET'])
-def getProdutora(id):
+def getProdutora(nome):
     conn = getDbConnection()
     cur = conn.cursor()
-    cur.execute("SELECT * FROM Produtora WHERE id_produtora = %s;", (id,))
+    cur.execute("SELECT * FROM Produtora WHERE Nome = %s;", (nome,))
     prod = cur.fetchone()
     cur.close()
     conn.close()
     if prod:
-        return jsonify({"id": prod[0], "nome": prod[1]})
+        return jsonify({"nome": prod[0], "senha": prod[1]})
     return jsonify({"error": "Produtora não encontrada"}), 404
+
+@app.route('/itensPelaProdutora/<nome>', methods=['GET'])
+def getItensProdutora(nome):
+    conn = getDbConnection()
+    cur = conn.cursor()
     
+    cur.execute("SELECT * FROM Item WHERE nome_prod = (%s);", (nome,))
+    produtos = cur.fetchall()  # Lista de tuplas
+    
+    cur.close()
+    conn.close()
+    
+    if not produtos:
+        return jsonify({"error": "Nenhum item encontrado para essa produtora"}), 404
+
+    # Criar uma lista de dicionários para cada produto encontrado
+    lista_itens = []
+    for prod in produtos:
+        foto_base64 = base64.b64encode(prod[6]).decode('utf-8') if prod[6] else None
+        item = {
+            "nome": prod[1],
+            "descricao": prod[2],
+            "preco": prod[3],
+            "dataLancamento": prod[4],
+            "nomeProd": prod[5],
+            "foto": foto_base64
+        }
+        lista_itens.append(item)
+
+    return jsonify(lista_itens)
+    
+
 @app.route('/produtoraCreate', methods=['POST'])
 def createProdutora():
     data = request.json
     nome = data.get("nome")
+    senha = data.get("senha")   
     conn = getDbConnection()
     cur = conn.cursor()
     try:
-        cur.execute("INSERT INTO Produtora (Nome) VALUES (%s);", ( nome,))
+        cur.execute("INSERT INTO Produtora (Nome, Senha) VALUES (%s, %s);", ( nome, senha))
         conn.commit()
         cur.close()
         conn.close()
@@ -398,11 +460,11 @@ def updateProdutora(cpf):
         return jsonify({"cpf": updatedUser[0], "nome": updatedUser[1]})
     return jsonify({"error": "Usuário não encontrado"}), 404
 
-@app.route('/produtoraDelete/<cpf>', methods=['DELETE'])
-def deleteProdutora(cpf):
+@app.route('/produtoraDelete/<nome>', methods=['DELETE'])
+def deleteProdutora(nome):
     conn = getDbConnection()
     cur = conn.cursor()
-    cur.execute("DELETE FROM Usuario WHERE Cpf = %s;", (cpf,))
+    cur.execute("DELETE FROM Produtora WHERE Nome = %s;", (nome,))
     conn.commit()
     cur.close()
     conn.close()

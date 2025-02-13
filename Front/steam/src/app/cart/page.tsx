@@ -10,11 +10,21 @@ import { getItemsFromCart } from "../api/cartAPI";
 
 export default function Cart() {
   const [games, setGames] = useState([]);
+  const [subtotal, setSubtotal] = useState(0);
+
+  const calcularSubTotal = (preços : []) => {
+    let subtotal = 0
+    preços.forEach(element => {
+      subtotal = subtotal + element[1]
+    });
+    setSubtotal(subtotal)
+  }
 
   const fetchGames = async () => {
-    const response = await getItemsFromCart(localStorage.getItem("username")!);
-    const data = await response.json();
-    setGames(data);
+    const response = await getItemsFromCart(localStorage.getItem("user")!);
+    console.log(response)
+    setGames(response);
+    calcularSubTotal(response);
   }
 
   useEffect(() => {
@@ -29,10 +39,10 @@ export default function Cart() {
         <div className="relative inline-flex gap-3">
           <div className="bg-gray-500 p-2 flex gap-4 flex flex-col rounded-lg">
             {games.map((game) => (
-              <div key={game} className="bg-white rounded-lg shadow-md overflow-hidden relative">
+              <div key={game[0]} className="bg-white rounded-lg shadow-md overflow-hidden relative">
                 
                 <div className="flex justify-between items-center mb-2 p-3 flex items-center justify-between">
-                  <h2 className="text-black text-xl font-bold text-left">{game}</h2>
+                  <h2 className="text-black text-xl font-bold text-left">{game[0]}</h2>
                 </div>
 
                 <img src="mario.avif"
@@ -41,7 +51,7 @@ export default function Cart() {
 
                 <div className="p-4 flex items-center gap-3 justify-between">
                     <div className="flex justify-between items-center mb-2">
-                        <div className="text-black text-xl font-bold"> R$00,00</div>
+                        <div className="text-black text-xl font-bold"> R${game[1]},00</div>
                     </div>
 
                     <Link href="https://www.clickjogos.com.br/" legacyBehavior>
@@ -54,11 +64,11 @@ export default function Cart() {
             <div className= "fixed bg-gray-800 p-4 gap-3 rounded-lg">
 
               <div className="flex">
-                <p className="text-xl bold text-gray-500">Quantidade:</p> <p className="text-xl bold text-white">0</p>
+                <p className="text-xl bold text-gray-500">Quantidade:</p> <p className="text-xl bold text-white">{games.length}</p>
               </div>
 
               <div className= "inline-flex">
-                <p className= "text-xl bold text-gray-500">Subtotal:</p> <p className="text-xl bold text-white"> R$00,00</p>
+                <p className= "text-xl bold text-gray-500">Subtotal:</p> <p className="text-xl bold text-white"> R${subtotal},00</p>
               </div>
 
               <Link href="https://www.clickjogos.com.br/" legacyBehavior>

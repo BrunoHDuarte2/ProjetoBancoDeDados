@@ -7,7 +7,7 @@ import { signInProducer } from "../api/authAPI";
 
 export default function Login() {
   const [input, setInput] = useState({
-    cnpj: "",
+    nome: "",
     password: ""
   });
 
@@ -38,7 +38,7 @@ export default function Login() {
           <div className="flex flex-col">
             <label className="text-blue-400" htmlFor="cnpj">Nome da Produtora</label>
             <input type="text" id="cnpj" name="cnpj" className="bg-gray-800 shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline" 
-            onChange={(e) => setInput({...input, cnpj: e.target.value})} required/>
+            onChange={(e) => setInput({...input, nome: e.target.value})} required/>
           </div>
           <div className="flex flex-col">
             <label className="text-gray-400" htmlFor="password">Senha</label>

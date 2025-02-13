@@ -3,6 +3,7 @@ import { createUser } from "./userAPI";
 import { createCart } from "./cartAPI";
 import { createInventory } from "./inventoryAPI";
 import { getUser } from "./userAPI"
+import { getProducer } from "./producerAPI"
 
 export const signIn = async (data: any) => {
     const response = await getUser(data.username);
@@ -13,8 +14,8 @@ export const signIn = async (data: any) => {
 }
 
 export const signInProducer = async (data: any) => {
-    const response = await getUser(data.cnpj);
-    if (response.senha === data.password) {
+    const response = await getProducer(data.nome);
+    if (response.senha.trim() == data.password.trim()) {
         return response;
     }
     return false;

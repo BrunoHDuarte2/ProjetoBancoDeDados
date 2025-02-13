@@ -17,3 +17,13 @@ export const getGame = async (id: number) => {
         console.log(error)
     }
 };
+
+export const getGamesFromProducer = async (name: string) => {
+    try {
+        const response = await api.get(`/itensPelaProdutora/${name}`);
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}

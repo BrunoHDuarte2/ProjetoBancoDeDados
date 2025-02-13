@@ -6,16 +6,15 @@ import Link from 'next/link';
 import Footer from "../components/footer";
 import { ImBooks } from "react-icons/im";
 import { useState, useEffect } from "react";
-import { getInventory } from "../api/inventoryAPI"; 
+import { getGames } from "../api/inventoryAPI"; 
 
 export default function Library() {
   const [inventory, setInventory] = useState([]);
 
   const fetchInventory = async () => {
     try {
-      const response = await getInventory(localStorage.getItem("user")!);
-      const inventory = await response.json();
-      setInventory(inventory.jogos);
+      const response = await getGames(localStorage.getItem("user")!);
+      setInventory(response.jogos);
     } catch (error) {
       console.log(error);
     }

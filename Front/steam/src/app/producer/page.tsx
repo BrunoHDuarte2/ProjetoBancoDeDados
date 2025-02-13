@@ -12,17 +12,25 @@ import { MdMonitor } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { FaGear } from "react-icons/fa6";
 import { LuLogOut } from "react-icons/lu";
-import { getProducer } from "../api/producerAPI";
+import { getProducer, deleteProducer, updateProducer } from "../api/producerAPI";
 import { getGamesFromProducer } from "../api/gamesAPI"; 
 import { Producer } from "../../types/producer";
 import { Game } from "../../types/games";
 
 export default function ProducerPage() {
-  const [isEditable, setIsEditable] = useState([false, false, false]);
   const [producer, setProducer] = useState<Producer>({nome: "teste", senha: "teste"});
-  const [ownedGames, setOwnedGames] = useState(["Mario Odyssey", "Zelda Breath of the Wild", "Mario Kart 8 Deluxe", "Super Smash Bros Ultimate", "Splatoon 2", "Animal Crossing New Horizons"]);
+  const [ownedGames, setOwnedGames] = useState<Game[]>([]);
+  const [input, setInput] = useState({
+    nome: "",
+    senha: ""
+  });
+
+  const updateProdutora = async () => {
+        await updateProducer(input);
+      }
   
   const fetchProducer = async () => {
+    console.log(localStorage.getItem("producer")!);
     const data = await getProducer(localStorage.getItem("producer")!);
     setProducer(data);
   }
@@ -32,9 +40,19 @@ export default function ProducerPage() {
     setOwnedGames(data);
   }
 
+  const handleDelete = async () => {
+    await deleteProducer(localStorage.getItem("producer"));
+    localStorage.clear();
+    window.location.href = "/login";
+  }
+
   useEffect(() => {
-    //fetchProducer();
-    //fetchGames();
+    setInput({nome: producer?.nome!, senha: producer?.senha!});
+  }, [producer])
+
+  useEffect(() => {
+    fetchProducer();
+    fetchGames();
   }, []);
 
   return (
@@ -51,32 +69,39 @@ export default function ProducerPage() {
                       <div className="flex flex-col">
                         <label className="text-white" htmlFor="username">Nome da Produtora</label>
                         <div className="relative items-center inline-flex">
-                          <input type="text" id="username" name="username" defaultValue={producer?.nome} className="bg-gray-800 shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline" />
-                          <button className="absolute left-[90%] bg-gray-800 h-full border text-white border-x-gray-800"><FaEdit /></button>
+                          <input type="text" id="username" name="username" defaultValue={producer?.nome} className="bg-gray-800 shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline" 
+                          onChange={(e) => setInput({...input, nome: e.target.value})}/>
+                          <button className="absolute left-[90%] bg-gray-800 h-full border text-white border-x-gray-800"
+                          onClick={updateProdutora}><FaEdit /></button>
                         </div>
                       </div>
                       <div className="flex flex-col">
                         <label className="text-white" htmlFor="password">Senha</label>
                         <div className="relative items-center inline-flex">
-                          <input type="password" id="password" name="password" defaultValue={producer?.senha} className="bg-gray-800 shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline" />
-                          <button className="absolute left-[90%] bg-gray-800 h-full border text-white border-x-gray-800"><FaEdit /></button>
+                          <input type="password" id="password" name="password" defaultValue={producer?.senha} className="bg-gray-800 shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline" 
+                          onChange={(e) => setInput({...input, senha: e.target.value})}/>
+                          <button className="absolute left-[90%] bg-gray-800 h-full border text-white border-x-gray-800"
+                          onClick={updateProdutora}><FaEdit /></button>
                         </div>
                       </div>
                   </form>
                   </div>
+                  <button className="font-semibold rounded-lg text-white border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-red-500 text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 bg-red-600"
+                      onClick={handleDelete}>
+                      Apagar Produtora</button>
               </div>
               <div className="gap-4">
                 <h1 className="text-blue-400 text-3xl text-bold underline"> Jogos da Produtora </h1>
                 <div className="grid grid-cols-4 gap-4">
-                {ownedGames.map((game) => (
-                  <div key={game} className="rounded-lg shadow-md overflow-hidden relative">
+                { ownedGames != undefined ? ownedGames.map((game) => (
+                  <div key={game.idItem} className="rounded-lg shadow-md overflow-hidden relative">
                     <div className="bg-white flex items-center p-1 items-center justify-between h-10">
-                      <h2 className="text-black text-sm font-bold text-left">{game}</h2>
+                      <h2 className="text-black text-sm font-bold text-left">{game.nome}</h2>
                       <button className="text-3xl text-black"> <FaGear/></button>
                     </div>
                     <img src="mario.avif"
-                    alt={game} className="w-full h-50 object-cover" />
-                </div>))}
+                    alt={game.nome} className="w-full h-50 object-cover" />
+                </div>)) : <></>}
                 </div>
               </div>
           </div>
