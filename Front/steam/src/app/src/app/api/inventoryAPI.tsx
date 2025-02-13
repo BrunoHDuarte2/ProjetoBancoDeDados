@@ -11,6 +11,15 @@ export const getInventory = async (username: string) => {
     }
 }
 
+export const getGames = async (username: string) => {
+    try {
+        const response = await api.get(`/colecaoDeJogos/${username}`);
+        return response.data;
+    } catch(error){
+        console.log(error)
+    }
+}
+
 export const createInventory = async (username: string) => {
     try{
         const response = await api.post("/inventarioCreate", {idUsuario: username});

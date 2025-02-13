@@ -207,10 +207,16 @@ function Links() {
 
 const Header: React.FC<HeaderProps> = ({ }) => {
   const [estaAberto, setEstaAberto] = useState(false);
+  const [picture, setPicture] = useState("");
 
   const alternarNavbar = () => {
     setEstaAberto(!estaAberto);
   };
+
+  const getUser = () => {
+    const user = localStorage.getItem("user");
+    setUser(user!);
+  }
 
   useEffect(() => {
 
@@ -218,6 +224,7 @@ const Header: React.FC<HeaderProps> = ({ }) => {
     if (!logged) {
       //window.location.href = "/login";
     }
+    getUser();
 
     const lidarComResize = () => {
       if (window.innerWidth >= 768) {
