@@ -13,13 +13,17 @@ export default function Library() {
 
   const fetchInventory = async () => {
     try {
-      const response = await getInventory(localStorage.getItem("user"));
+      const response = await getInventory(localStorage.getItem("user")!);
       const inventory = await response.json();
       setInventory(inventory);
     } catch (error) {
       console.log(error);
     }
   }
+
+  useEffect(() => {
+    fetchInventory();
+  }, []);
 
   return (
     <div className="bg-gray-700 grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">

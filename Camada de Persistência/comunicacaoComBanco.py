@@ -6,9 +6,9 @@ app = Flask(__name__)
 CORS(app)
 
 DB = {
-    "dbname": "projbd", # Lembra de alterar pelo nome que você deu pro bd no seu pc 
+    "dbname": "projetobd", # Lembra de alterar pelo nome que você deu pro bd no seu pc 
     "user": "postgres",
-    "password": "mainPyke02!", # Por favor não subir com sua senha de verdade  :))
+    "password": "senha", # Por favor não subir com sua senha de verdade  :))
     "host": "localhost",
     "port": "5432"
 }
@@ -215,7 +215,7 @@ def addItemCarrinho():
     idUsuario = data.get("idUsuario")
     conn = getDbConnection()
     cur = conn.cursor()
-    cur.execute("INSERT INTO Carrinho_compra (idItem, idUsuario) VALUES (%s, %s);", (idItem, idUsuario))
+    cur.execute("INSERT INTO Carrinho_compra (id_item, id_usuario) VALUES (%s, %s);", (idItem, idUsuario))
     conn.commit()
     cur.close()
     conn.close()

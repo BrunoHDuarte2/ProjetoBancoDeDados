@@ -8,3 +8,12 @@ export const createCart = async (username: string) => {
         console.log(error)
     }
 }
+
+export const addGameToCart = async (idItem: number, idUsuario: string) => {
+    try{
+        const response = await api.post("/carrinhoCompraCreate", {idItem: idItem, idUsuario: idUsuario});
+        return response.data;
+    } catch(error){
+        console.log(error)
+    }
+}

@@ -16,12 +16,13 @@ export default function Login() {
     
     try{
       const response = await signIn(input);
-      
+      console.log(response)
       if (response != false){
-        localStorage.setItem("user", JSON.stringify(response.user));
+        localStorage.clear();
+        localStorage.setItem("user", response.nome);
+        window.location.href = "/library";
       }
 
-      window.location.href = "/library";
     } catch(error){
       console.log(error);
     }
