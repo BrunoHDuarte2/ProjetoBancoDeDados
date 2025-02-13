@@ -6,6 +6,9 @@ import { IoIosArrowDown } from "react-icons/io";
 import { FaSteam } from "react-icons/fa";
 import Link from 'next/link';
 import Image from "next/image";
+import { getUser, deleteUser } from "../api/userAPI";
+import { getGames } from "../api/inventoryAPI";
+import { User } from "../../types/user";
 
 import { IoPerson } from "react-icons/io5";
 import { IoIosCloseCircleOutline } from "react-icons/io";
@@ -24,11 +27,33 @@ function Links() {
   const listDropDown = [{text:"Configurações", icon: <FaGear />}, {text: "Sair", icon: <LuLogOut />}];
 
   function Modal() {
+    const [user, setUser] = useState<User>();
     const [isEditable, setIsEditable] = useState([false, false, false]);
     const [selectedOption, setSelectedOption] = useState("Conta");
     const [ownedGames, setOwnedGames] = useState(["Mario Odyssey", "Zelda Breath of the Wild", "Mario Kart 8 Deluxe", "Super Smash Bros Ultimate", "Splatoon 2", "Animal Crossing New Horizons"]);
     const options = [{text:"Conta",icon:<IoPerson />},{text:"Biblioteca",icon:<HiMiniSquares2X2 />}];
-  
+
+    const handleDelete = async () => {
+      await deleteUser(localStorage.getItem("user"));
+      localStorage.clear();
+      window.location.href = "/login";
+    }
+
+    const fetchUser = async () => {
+      const response : User = await getUser(localStorage.getItem("user"));
+      setUser(response);
+    }
+
+    const fetchGames = async () => {
+      const response = await getGames(localStorage.getItem("user")!);
+      setOwnedGames(response);
+    }
+
+    useEffect (() => {
+      fetchUser();
+      fetchGames();
+    }, []);
+
     return (
       <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-50 flex items-center justify-center">
         <div className="bg-slate-600 rounded-lg w-[800px] h-[450px]">
@@ -69,20 +94,20 @@ function Links() {
                         <label className="text-white" htmlFor="username">Email</label>
                         <div className="relative items-center inline-flex justify-between">
                           <button className="absolute left-[90%] bg-gray-800 h-full border text-white border-x-gray-800"><FaEdit /></button>
-                          <input type="text" id="email" name="email" className="bg-gray-800 shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline" />
+                          <input type="text" id="email" name="email" value={user?.email} className="bg-gray-800 shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline" />
                         </div>  
                       </div>
                       <div className="flex flex-col">
                         <label className="text-white" htmlFor="username">Nome de Usuário</label>
                         <div className="relative items-center inline-flex">
-                          <input type="text" id="username" name="username" className="bg-gray-800 shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline" />
+                          <input type="text" id="username" name="username" value={user?.nome} className="bg-gray-800 shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline" />
                           <button className="absolute left-[90%] bg-gray-800 h-full border text-white border-x-gray-800"><FaEdit /></button>
                         </div>
                       </div>
                       <div className="flex flex-col">
                         <label className="text-white" htmlFor="password">Senha</label>
                         <div className="relative items-center inline-flex">
-                          <input type="password" id="password" name="password" className="bg-gray-800 shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline" />
+                          <input type="password" id="password" name="password" value={user?.senha} className="bg-gray-800 shadow appearance-none border rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline" />
                           <button className="absolute left-[90%] bg-gray-800 h-full border text-white border-x-gray-800"><FaEdit /></button>
                         </div>
                       </div>
@@ -105,7 +130,8 @@ function Links() {
                   </p>
                     Ao apagar sua conta, suas licenças serão expiradas e todos os seus itens serão perdidos permanentemente. 
                 </div>
-                <button className="font-semibold rounded-lg text-white border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-red-500 text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 bg-red-600">
+                <button className="font-semibold rounded-lg text-white border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-red-500 text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 bg-red-600"
+                onClick={()=>handleDelete}>
                 Prosseguir com o apagamento</button>
               </div> :
               selectedOption === "Biblioteca" ? <div className="flex flex-col p-2 gap-4 items-center">
@@ -199,12 +225,25 @@ function Links() {
 
 const Header: React.FC<HeaderProps> = ({ }) => {
   const [estaAberto, setEstaAberto] = useState(false);
+  const [user, setUser] = useState("");
 
   const alternarNavbar = () => {
     setEstaAberto(!estaAberto);
   };
 
+  const fetchUser = async () => {
+    const response = await getUser(localStorage.getItem("user"));
+    setUser(response);
+  }
+
   useEffect(() => {
+
+    const logged = localStorage.getItem("user");
+    if (!logged) {
+      //window.location.href = "/login";
+    }
+    fetchUser();
+
     const lidarComResize = () => {
       if (window.innerWidth >= 768) {
         setEstaAberto(false);

@@ -15,7 +15,7 @@ export default function Library() {
     try {
       const response = await getInventory(localStorage.getItem("user")!);
       const inventory = await response.json();
-      setInventory(inventory);
+      setInventory(inventory.jogos);
     } catch (error) {
       console.log(error);
     }

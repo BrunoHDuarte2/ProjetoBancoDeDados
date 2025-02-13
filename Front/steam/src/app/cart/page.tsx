@@ -1,11 +1,25 @@
+"use client"
+
 import Image from "next/image";
 import Header from "../components/header";
 import Link from 'next/link';
 import { FaShoppingCart } from "react-icons/fa";
 import Footer from "../components/footer";
+import { useState, useEffect } from "react";
+import { getItemsFromCart } from "../api/cartAPI";
 
 export default function Cart() {
-  const games = ["Super Mario Odyssey", "The Legend of Zelda: Breath of the Wild", "Mario Kart 8", "Mario Kart 9","Pokémon: Legends Z-A", "GTA V", "GTA VI"];
+  const [games, setGames] = useState([]);
+
+  const fetchGames = async () => {
+    const response = await getItemsFromCart(localStorage.getItem("username")!);
+    const data = await response.json();
+    setGames(data);
+  }
+
+  useEffect(() => {
+    fetchGames();
+  }, []);
 
   return (
     <div className="bg-gray-700 grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">

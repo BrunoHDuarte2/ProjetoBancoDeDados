@@ -16,3 +16,11 @@ export const createUser = async (data: any) => {
     return error;
   }
 }
+
+export const deleteUser = async (username: any) => {
+  try {
+    await api.delete(`/usuarioDelete/${username}`);
+  } catch (error) {
+    return error;
+  }
+}

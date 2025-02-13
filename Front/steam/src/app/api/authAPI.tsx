@@ -12,8 +12,10 @@ export const signIn = async (data: any) => {
     return false;
 }
 
-export const signUp = async (data: any) => {
-    await createUser(data);
-    await createCart(data.username);
-    await createInventory(data.username);
+export const signInProducer = async (data: any) => {
+    const response = await getUser(data.cnpj);
+    if (response.senha === data.password) {
+        return response;
+    }
+    return false;
 }
