@@ -1,3 +1,5 @@
+"use client"
+
 import api from "../../utils/api";
 
 export const getInventory = async (username: string) => {
