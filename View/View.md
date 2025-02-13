@@ -8,6 +8,7 @@ SELECT i.id_usuario,
        it.nome AS nome_item
 FROM carrinho_compra i
 JOIN item it ON i.id_item = it.id_item;
+```
 
 Esta view retorna a lista de itens adicionados ao carrinho de compra de cada usuário. Ela relaciona a tabela carrinho_compra com item, trazendo o id do usuário e o nome do item.
 
