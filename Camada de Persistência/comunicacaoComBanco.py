@@ -37,6 +37,19 @@ def getUsuarios():
     response = jsonify([{"nome": u[0]} for u in usuarios])
     return response
 
+@app.route('/colecaoDeJogos/<nome>', methods=['GET'])
+def getJogos(nome):
+    conn = getDbConnection()
+    cur = conn.cursor()
+    cur.execute("""SELECT nome_item FROM public."colecaoDeJogos" WHERE id_usuario = (%s);""", (nome,))
+    jogos = cur.fetchall()
+    cur.close()
+    conn.close()
+    response = jsonify({"jogos": jogos})
+    return response
+
+
+
 @app.route('/modificaImagemUser', methods=['POST'])
 def insereImagemEmBase64():
     try:
