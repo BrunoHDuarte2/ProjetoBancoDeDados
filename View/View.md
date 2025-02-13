@@ -14,15 +14,18 @@ Esta view retorna a lista de itens adicionados ao carrinho de compra de cada usu
 
 2. Itens no Inventário do Usuário
 
+```
 SELECT i.id_usuario,
        it.nome AS nome_item
 FROM inventario i
 JOIN item it ON i.id_item = it.id_item;
 
+```
 Semelhante à anterior, essa view exibe os itens que um usuário já adquiriu e possui no inventário. A junção ocorre entre inventario e item, retornando o id do usuário e o nome do item.
 
 3. Desempenho e Avaliação dos Jogos
 
+```
 SELECT i.nome AS jogo,
        p.nome AS produtora,
        i."descrição" AS descricao,
@@ -35,6 +38,7 @@ LEFT JOIN inventario inv ON i.id_item = inv.id_item
 LEFT JOIN avaliacao a ON i.id_item = a.id_avaliacao
 GROUP BY i.id_item, p.nome;
 
+```
 Esta view apresenta informações detalhadas sobre os jogos disponíveis, incluindo:
 
 Nome do jogo
