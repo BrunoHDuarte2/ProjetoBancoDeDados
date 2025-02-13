@@ -14,7 +14,8 @@ CREATE TABLE Pagamento (
 
 CREATE TABLE Produtora (
     Id_produtora varchar(14) PRIMARY KEY,
-    Nome varchar(40) NOT NULL
+    Nome varchar(40) NOT NULL,
+    Senha varchar(35) NOT NULL
 );
 
 CREATE TABLE Avaliacao (
