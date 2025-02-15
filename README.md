@@ -1,6 +1,6 @@
 Este projeto é uma atividade avaliativa da turma de bancos de dados ministrada pela professora Maristela. Cada uma das pastas na main do projeto contém um dos requisitos listados na especificação do trabalho, sendo eles:
 
-• Front: todos os código do projeto
+• Front e Camada de Persistência: compõe o CRUD, com todos os código do projeto
 
 • Script SQL: os scripts que geraram o banco de dados -  criação das tabelas, ingestão de dados, procedure e views
 
